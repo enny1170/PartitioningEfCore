@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PartitioningEfCore")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fbef0614ac3f955969b9e0448dcb673f9de59ad5")]
 [assembly: System.Reflection.AssemblyProductAttribute("PartitioningEfCore")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PartitioningEfCore")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
