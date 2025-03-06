@@ -68,7 +68,7 @@ public partial class PartitiontestContext : DbContext
         
         modelBuilder.Entity<TestYear>(entity =>
         {
-            entity.ToTable("TestYear");
+            // entity.ToTable("TestYear");
             entity.HasKey(e=> new { e.Id, e.Year});
             entity.Property(e=> e.Testfeld).HasMaxLength(10);
         });

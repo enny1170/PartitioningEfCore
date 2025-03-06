@@ -12,7 +12,7 @@ using PartitioningEfCore.database;
 namespace PartitioningEfCore.Migrations
 {
     [DbContext(typeof(PartitiontestContext))]
-    [Migration("20250306110237_second")]
+    [Migration("20250306122016_second")]
     partial class second
     {
         /// <inheritdoc />
@@ -97,7 +97,7 @@ namespace PartitioningEfCore.Migrations
 
                     b.HasKey("Id", "Year");
 
-                    b.ToTable("TestYear", (string)null);
+                    b.ToTable("TestYears");
 
                     b
                         .HasAnnotation("Partition:FieldName", "Year")

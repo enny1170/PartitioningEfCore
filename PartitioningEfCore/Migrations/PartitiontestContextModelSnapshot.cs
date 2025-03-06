@@ -94,7 +94,7 @@ namespace PartitioningEfCore.Migrations
 
                     b.HasKey("Id", "Year");
 
-                    b.ToTable("TestYear", (string)null);
+                    b.ToTable("TestYears");
 
                     b
                         .HasAnnotation("Partition:FieldName", "Year")

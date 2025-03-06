@@ -12,7 +12,7 @@ namespace PartitioningEfCore.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "TestYear",
+                name: "TestYears",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -21,7 +21,7 @@ namespace PartitioningEfCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestYear", x => new { x.Id, x.Year });
+                    table.PrimaryKey("PK_TestYears", x => new { x.Id, x.Year });
                 });
         }
 
@@ -29,7 +29,7 @@ namespace PartitioningEfCore.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "TestYear");
+                name: "TestYears");
         }
     }
 }

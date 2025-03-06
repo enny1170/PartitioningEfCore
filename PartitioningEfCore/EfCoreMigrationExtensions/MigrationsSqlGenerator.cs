@@ -192,7 +192,9 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
             {
                 //maybe the name is pluralized so we try to depluralize it
                 _logger.LogWarning("Entity Type not found for {TableName}. Trying to depluralize it.", operation.Name);
-                entityType = model?.GetEntityTypes().FirstOrDefault(x => x.Name.Split('.').Last().Depluralize() == operation.Name);
+                // var deplu=operation.Name.Depluralize();
+                // _logger.LogInformation($"{deplu}", operation.Name);
+                entityType = model?.GetEntityTypes().FirstOrDefault(x => x.Name.Split('.').Last() == operation.Name.Depluralize());
             }
             if (entityType != null)
             {
