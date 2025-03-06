@@ -20,7 +20,7 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
             : base(dependencies, commandBatchPreparer)
         {
             _relationalAnnotationProvider = relationalAnnotationProvider;
-            _logger = Loggerfactory.CreateLogger<MigrationsSqlGeneratorEx>(builder => builder.addConsole()).CreateLogger<MigrationsSqlGeneratorEx>();
+            _logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<MigrationsSqlGeneratorEx>();
         }
 
         protected override void Generate(MigrationOperation operation, IModel? model, MigrationCommandListBuilder builder)
