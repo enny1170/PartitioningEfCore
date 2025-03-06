@@ -14,20 +14,12 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
     public class MigrationsSqlGeneratorEx : SqlServerMigrationsSqlGenerator
     {
         private readonly IRelationalAnnotationProvider _relationalAnnotationProvider;
-            private static readonly ILoggerFactory _loggerFactory = LoggerFactory.Create(builder =>
-    {
-        builder
-            .AddConsole()  // 📌 Log-Ausgabe in die Konsole
-            .SetMinimumLevel(LogLevel.Information); // Log-Level setzen
-    });
-        private readonly ILogger<MigrationsSqlGeneratorEx> _logger;
         public MigrationsSqlGeneratorEx(
             MigrationsSqlGeneratorDependencies dependencies,
             ICommandBatchPreparer commandBatchPreparer, IRelationalAnnotationProvider relationalAnnotationProvider)
             : base(dependencies, commandBatchPreparer)
         {
             _relationalAnnotationProvider = relationalAnnotationProvider;
-            _logger=_loggerFactory.CreateLogger<MigrationsSqlGeneratorEx>();
         }
 
         protected override void Generate(MigrationOperation operation, IModel? model, MigrationCommandListBuilder builder)
@@ -186,40 +178,21 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
             }
             builder.Append(")");
 
-            // Überprüfen Sie auf Partition-Annotation und generieren Sie zusätzlichen SQL-Code
-            _logger.LogInformation("Checking for Partition Annotation");
-            _logger.LogInformation("Operation Name: " + operation.Name);
+            // Überprüfen auf Partition-Annotation und generieren Sie zusätzlichen SQL-Code
             var entityType = model?.GetEntityTypes().FirstOrDefault(x => x.Name.Split('.').Last() == operation.Name);
             if (entityType != null)
             {
-                _logger.LogInformation($"Search at Type {entityType.Name}");
                 var x = entityType.AnnotationsToDebugString();
-                _logger.LogInformation(x.ToString());
                 var partitionSchema = entityType.FindAnnotation("Partition:SchemaName")?.Value?.ToString();
                 var partitionField = entityType.FindAnnotation("Partition:FieldName")?.Value?.ToString();
                 if (partitionSchema != null && partitionField != null)
                 {
-                    _logger.LogInformation("Type Has Partition Annotation");
                     builder.Append(" ON ")
                         .Append(sqlHelper.DelimitIdentifier(partitionSchema))
                         .Append(" ( ")
                         .Append(sqlHelper.DelimitIdentifier(partitionField))
                         .Append(")");
                 }
-                else
-                {
-                    _logger.LogInformation("Partition Annotation not found");
-                    var clrType = entityType.ClrType;
-                    _logger.LogInformation($"ClrType: {clrType.Name} has {clrType.CustomAttributes.Count()} custom attributes.");
-                    foreach (var attrib in clrType.CustomAttributes)
-                    {
-                        _logger.LogInformation($"Attribut: {attrib.AttributeType.Name}");
-                    }
-                }
-            }
-            else
-            {
-                _logger.LogInformation("EntityType not found for: " + operation.Name);
             }
         
             builder
