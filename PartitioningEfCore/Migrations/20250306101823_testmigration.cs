@@ -7,15 +7,13 @@ using MigrationsBuilder;
 namespace PartitioningEfCore.Migrations
 {
     /// <inheritdoc />
-    public partial class first : Migration
+    public partial class testmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            //Create Partition Function and Shema.
-            //must be done by hand after Migration is created
-            migrationBuilder.CreatePartitionFunction<int>("TestIntFunction", new List<int> { 2022, 2023, 2024, 2025, 2026, 2027, 2028 });
-            migrationBuilder.CreatePartitionScheme("TestSchemeA", "TestIntFunction");
+            migrationBuilder.CreatePartitionFunction("TestMertFunc",new List<short>(){2022,2023,2024});
+            migrationBuilder.CreatePartitionScheme("TestMertSheme","TestMertFunc");
             migrationBuilder.CreateTable(
                 name: "PartTestTable",
                 columns: table => new
@@ -55,9 +53,8 @@ namespace PartitioningEfCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "TestTable");
-        ///Drop Partition Function and Shema. also handwork
-            migrationBuilder.DropPartitionScheme("TestSchemeA");
-            migrationBuilder.DropPartitionFunction("TestIntFunction");
+            migrationBuilder.DropPartitionScheme("TestMertSheme");
+            migrationBuilder.DropPartitionFunction("TestMertFunc");
         }
     }
 }

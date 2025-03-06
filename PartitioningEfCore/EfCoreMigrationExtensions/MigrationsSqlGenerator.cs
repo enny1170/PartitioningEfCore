@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
@@ -180,15 +181,24 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
             builder.Append(")");
 
             // Überprüfen auf Partition-Annotation und generieren Sie zusätzlichen SQL-Code
+            StringBuilder sb= new StringBuilder();
+            foreach(var item in model?.GetEntityTypes())
+            {
+                sb.AppendLine($"Entity: {item.Name}");
+            }
+            _logger.LogInformation(sb.ToString());
             var entityType = model?.GetEntityTypes().FirstOrDefault(x => x.Name.Split('.').Last() == operation.Name);
             if (entityType == null)
             {
                 //maybe the name is pluralized so we try to depluralize it
                 _logger.LogWarning("Entity Type not found for {TableName}. Trying to depluralize it.", operation.Name);
-                entityType = model?.GetEntityTypes().FirstOrDefault(x => x.Name.Split('.').Last().Depluralize() == operation.Name);
+                // var deplu=operation.Name.Depluralize();
+                // _logger.LogInformation($"{deplu}", operation.Name);
+                entityType = model?.GetEntityTypes().FirstOrDefault(x => x.Name.Split('.').Last() == operation.Name.Depluralize());
             }
             if (entityType != null)
             {
+                _logger.LogInformation($"Entity for {operation.Name} found");
                 var x = entityType.AnnotationsToDebugString();
                 var partitionSchema = entityType.FindAnnotation("Partition:SchemaName")?.Value?.ToString();
                 var partitionField = entityType.FindAnnotation("Partition:FieldName")?.Value?.ToString();
