@@ -25,6 +25,8 @@ public partial class PartitiontestContext : DbContext
 
     public virtual DbSet<TestTable> TestTables { get; set; }
 
+    public virtual DbSet<TestYear> TestYears { get; set; }
+
 /// <summary>
 /// Setup the Connection and register the custom Migration Services
 /// </summary>
@@ -32,7 +34,7 @@ public partial class PartitiontestContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        optionsBuilder.UseSqlServer("your connection string")
+        optionsBuilder.UseSqlServer("Server=(LocalDb)\\MSSQLLocalDB;Database=DBforClone;Trusted_Connection=True")
         .ReplaceService<IMigrationsSqlGenerator, MigrationsSqlGeneratorEx>()
         .ReplaceService<IMigrationsAnnotationProvider, CustomMigrationsAnnotationProvider>();
     }
@@ -64,6 +66,12 @@ public partial class PartitiontestContext : DbContext
                 .HasColumnName("test");
         });
         
+        modelBuilder.Entity<TestYear>(entity =>
+        {
+            entity.ToTable("TestYear");
+            entity.HasKey(e=> new { e.Id, e.Year});
+            entity.Property(e=> e.Testfeld).HasMaxLength(10);
+        });
 
         // Ensure PartitionAttribute will be written to Migration as Annotation
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())

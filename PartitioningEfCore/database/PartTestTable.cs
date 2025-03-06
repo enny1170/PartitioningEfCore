@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using PartitioningEfCore.EfCoreMigrationExtensions;
 
 namespace PartitioningEfCore.database;
-[Partition("TestSchemeA", "Year")]
+[Partition("TestMertSheme", "Year")]
 public partial class PartTestTable
 {
     public Guid Id { get; set; }

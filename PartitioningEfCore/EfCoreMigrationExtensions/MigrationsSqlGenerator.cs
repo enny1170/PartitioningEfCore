@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
@@ -14,12 +15,14 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
     public class MigrationsSqlGeneratorEx : SqlServerMigrationsSqlGenerator
     {
         private readonly IRelationalAnnotationProvider _relationalAnnotationProvider;
+        private readonly ILogger<MigrationsSqlGeneratorEx> _logger;
         public MigrationsSqlGeneratorEx(
             MigrationsSqlGeneratorDependencies dependencies,
             ICommandBatchPreparer commandBatchPreparer, IRelationalAnnotationProvider relationalAnnotationProvider)
             : base(dependencies, commandBatchPreparer)
         {
             _relationalAnnotationProvider = relationalAnnotationProvider;
+            _logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<MigrationsSqlGeneratorEx>();
         }
 
         protected override void Generate(MigrationOperation operation, IModel? model, MigrationCommandListBuilder builder)
@@ -179,9 +182,16 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
             builder.Append(")");
 
             // Überprüfen auf Partition-Annotation und generieren Sie zusätzlichen SQL-Code
+            StringBuilder sb= new StringBuilder();
+            foreach(var item in model?.GetEntityTypes())
+            {
+                sb.AppendLine($"Entity: {item.Name}");
+            }
+            _logger.LogInformation(sb.ToString());
             var entityType = model?.GetEntityTypes().FirstOrDefault(x => x.Name.Split('.').Last() == operation.Name);
             if (entityType != null)
             {
+                _logger.LogInformation($"Entity for {operation.Name} found");
                 var x = entityType.AnnotationsToDebugString();
                 var partitionSchema = entityType.FindAnnotation("Partition:SchemaName")?.Value?.ToString();
                 var partitionField = entityType.FindAnnotation("Partition:FieldName")?.Value?.ToString();
@@ -193,6 +203,10 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
                         .Append(sqlHelper.DelimitIdentifier(partitionField))
                         .Append(")");
                 }
+            }
+            else
+            {
+                _logger.LogWarning($"Entity for {operation.Name} not found");
             }
         
             builder
