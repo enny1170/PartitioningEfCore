@@ -1,12 +1,15 @@
 # PartitioningEfCore
 
-This project demonstrates the implementation of database partitioning with Entity Framework Core. Database partitioning is a technique to divide large databases into smaller, more manageable parts, improving performance and maintainability.
+This project demonstrates the implementation of database partitioning with Entity Framework Core. 
+Because Table-Partitioning is not supported by EfCore for SQL-Server migrations. 
+Database partitioning is a technique to divide large databases into smaller, more manageable parts, improving performance and maintainability.
+
 
 ## Features
 
-- **Partitioning**: Implementation of database partitioning with EF Core.
-- **Examples**: Includes sample code to illustrate partitioning.
-- **Documentation**: Detailed documentation on implementation and usage.
+- **EfCoreMigrationExtensions**: Implementation of addtional and changed Migration Operation for SQL-Server.
+- **database**: Shows the use of the Attribute on Table Base
+- **migrations**: Shows the use oft the new Operations. See also the PartitiontestContext, how to use the extensions in your context.
 
 ## Prerequisites
 
@@ -32,11 +35,15 @@ This project demonstrates the implementation of database partitioning with Entit
 ## Usage
 
 1. Configure the database connection in `appsettings.json`.
-2. Apply the migrations:
+2. Show and check the generated sql-code
+    ```bash
+    dotnet ef migrations script
+    ```
+3. Apply the migrations:
     ```bash
     dotnet ef database update
     ```
-3. Run the application:
+4. Run the application:
     ```bash
     dotnet run
     ```
