@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using PartitioningEfCore.EFCoreMigrationExtensions;
 
 
-
 namespace PartitioningEfCore.EfCoreMigrationExtensions
 {
     public class MigrationsSqlGeneratorEx : SqlServerMigrationsSqlGenerator
@@ -189,6 +188,12 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
             }
             _logger.LogInformation(sb.ToString());
             var entityType = model?.GetEntityTypes().FirstOrDefault(x => x.Name.Split('.').Last() == operation.Name);
+            if (entityType == null)
+            {
+                //maybe the name is pluralized so we try to depluralize it
+                _logger.LogWarning("Entity Type not found for {TableName}. Trying to depluralize it.", operation.Name);
+                entityType = model?.GetEntityTypes().FirstOrDefault(x => x.Name.Split('.').Last().Depluralize() == operation.Name);
+            }
             if (entityType != null)
             {
                 _logger.LogInformation($"Entity for {operation.Name} found");
@@ -204,11 +209,7 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
                         .Append(")");
                 }
             }
-            else
-            {
-                _logger.LogWarning($"Entity for {operation.Name} not found");
-            }
-        
+
             builder
                 .AppendLine(sqlHelper.StatementTerminator)
                 .EndCommand();
