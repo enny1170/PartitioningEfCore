@@ -14,7 +14,7 @@ namespace PartitioningEfCore.Migrations
         {
             //Create Partition Function and Shema.
             //must be done by hand after Migration is created
-            migrationBuilder.CreatePartitionFunction<int>("TestIntFunction", new List<int> { 22, 23, 24, 25, 26, 27, 28, });
+            migrationBuilder.CreatePartitionFunction<int>("TestIntFunction", new List<int> { 2022, 2023, 2024, 2025, 2026, 2027, 2028 });
             migrationBuilder.CreatePartitionScheme("TestSchemeA", "TestIntFunction");
             migrationBuilder.CreateTable(
                 name: "PartTestTable",
