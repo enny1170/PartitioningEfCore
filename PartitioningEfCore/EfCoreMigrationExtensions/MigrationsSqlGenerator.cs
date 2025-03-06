@@ -13,12 +13,14 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
     public class MigrationsSqlGeneratorEx : SqlServerMigrationsSqlGenerator
     {
         private readonly IRelationalAnnotationProvider _relationalAnnotationProvider;
+        private readonly ILogger<MigrationsSqlGeneratorEx> _logger;
         public MigrationsSqlGeneratorEx(
             MigrationsSqlGeneratorDependencies dependencies,
             ICommandBatchPreparer commandBatchPreparer, IRelationalAnnotationProvider relationalAnnotationProvider)
             : base(dependencies, commandBatchPreparer)
         {
             _relationalAnnotationProvider = relationalAnnotationProvider;
+            _logger = Loggerfactory.CreateLogger<MigrationsSqlGeneratorEx>(builder => builder.addConsole()).CreateLogger<MigrationsSqlGeneratorEx>();
         }
 
         protected override void Generate(MigrationOperation operation, IModel? model, MigrationCommandListBuilder builder)
@@ -182,6 +184,7 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
             if (entityType == null)
             {
                 //maybe the name is pluralized so we try to depluralize it
+                _logger.LogWarning("Entity Type not found for {TableName}. Trying to depluralize it.", operation.Name);
                 entityType = model?.GetEntityTypes().FirstOrDefault(x => x.Name.Split('.').Last().Depluralize() == operation.Name);
             }
             if (entityType != null)
