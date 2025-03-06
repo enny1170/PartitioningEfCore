@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using PartitioningEfCore.EFCoreMigrationExtensions;
 
 
-
 namespace PartitioningEfCore.EfCoreMigrationExtensions
 {
     public class MigrationsSqlGeneratorEx : SqlServerMigrationsSqlGenerator
@@ -180,6 +179,11 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
 
             // Überprüfen auf Partition-Annotation und generieren Sie zusätzlichen SQL-Code
             var entityType = model?.GetEntityTypes().FirstOrDefault(x => x.Name.Split('.').Last() == operation.Name);
+            if (entityType == null)
+            {
+                //maybe the name is pluralized so we try to depluralize it
+                entityType = model?.GetEntityTypes().FirstOrDefault(x => x.Name.Split('.').Last().Depluralize() == operation.Name);
+            }
             if (entityType != null)
             {
                 var x = entityType.AnnotationsToDebugString();
@@ -194,7 +198,7 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
                         .Append(")");
                 }
             }
-        
+
             builder
                 .AppendLine(sqlHelper.StatementTerminator)
                 .EndCommand();
