@@ -12,6 +12,14 @@ namespace MigrationsBuilder;
 /// </summary>
 public static partial class Operations
 {
+    /// <summary>
+    /// Create a Partition Function
+    /// </summary>
+    /// <typeparam name="Trange"></typeparam>
+    /// <param name="migrationBuilder"></param>
+    /// <param name="name"></param>
+    /// <param name="rangeValues"></param>
+    /// <returns></returns>
     public static OperationBuilder<CreatePartitionFunctionOperation<Trange>> CreatePartitionFunction<Trange>(
         this MigrationBuilder migrationBuilder, string name, List<Trange> rangeValues)
     {
@@ -21,6 +29,12 @@ public static partial class Operations
         return new OperationBuilder<CreatePartitionFunctionOperation<Trange>>(operation);
     }
 
+/// <summary>
+/// Drop a Partition Function
+/// </summary>
+/// <param name="migrationBuilder"></param>
+/// <param name="name"></param>
+/// <returns></returns>
     public static OperationBuilder<DropPartitionFunctionOperation> DropPartitionFunction(
         this MigrationBuilder migrationBuilder, string name)
     {
@@ -30,6 +44,12 @@ public static partial class Operations
         return new OperationBuilder<DropPartitionFunctionOperation>(operation);
     }
 
+/// <summary>
+/// Drop a Partition Scheme
+/// </summary>
+/// <param name="migrationBuilder"></param>
+/// <param name="name"></param>
+/// <returns></returns>
     public static OperationBuilder<DropPartitionSchemeOperation> DropPartitionScheme(
         this MigrationBuilder migrationBuilder, string name)
     {

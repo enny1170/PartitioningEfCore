@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore.SqlServer.Migrations.Internal;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Reflection.Metadata.Ecma335;
 
+/// <summary>
+/// Custom Migration Annotation Provider
+/// write the Attributes to the migration file
+/// </summary>
 public class CustomMigrationsAnnotationProvider : IMigrationsAnnotationProvider
 {
     public CustomMigrationsAnnotationProvider(MigrationsAnnotationProviderDependencies dependencies)
@@ -47,7 +51,7 @@ public class CustomMigrationsAnnotationProvider : IMigrationsAnnotationProvider
     }
 
     public IEnumerable<IAnnotation> ForRemove(IColumn column) => column.GetAnnotations();
-    
+
     public IEnumerable<IAnnotation> ForRemove(IView view) => view.GetAnnotations();
 
     public IEnumerable<IAnnotation> ForRemove(IViewColumn column) => column.GetAnnotations();

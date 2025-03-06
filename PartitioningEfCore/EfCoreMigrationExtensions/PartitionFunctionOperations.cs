@@ -2,6 +2,7 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Microsoft.EntityFrameworkCore.Migrations.Operations.Builders;
 
+
 namespace PartitioningEfCore.EFCoreMigrationExtensions
 {
     /// <summary>
@@ -43,8 +44,8 @@ namespace PartitioningEfCore.EFCoreMigrationExtensions
 
     public class PartitionCreateTableOperation : CreateTableOperation
     {
-        public string? PartitionSchemaName { get; set; } 
-        public string? PartitionSchemaProperty { get; set; } 
+        public string? PartitionSchemaName { get; set; }
+        public string? PartitionSchemaProperty { get; set; }
     }
 
     // public class PartitionCreateTableBuilder : CreateTableBuilder<PartitionCreateTableOperation>

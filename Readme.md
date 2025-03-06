@@ -35,15 +35,19 @@ Database partitioning is a technique to divide large databases into smaller, mor
 ## Usage
 
 1. Configure the database connection in `appsettings.json`.
-2. Show and check the generated sql-code
+2. Build a new migration
+    ```bash
+    dotnet ef migrations add testmigration
+    ```
+3. Show and check the generated sql-code
     ```bash
     dotnet ef migrations script
     ```
-3. Apply the migrations:
+4. Apply the migrations:
     ```bash
     dotnet ef database update
     ```
-4. Run the application:
+5. Run the application:
     ```bash
     dotnet run
     ```
