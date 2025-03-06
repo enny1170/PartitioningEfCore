@@ -12,8 +12,8 @@ using PartitioningEfCore.database;
 namespace PartitioningEfCore.Migrations
 {
     [DbContext(typeof(PartitiontestContext))]
-    [Migration("20250306013357_first")]
-    partial class first
+    [Migration("20250306101823_testmigration")]
+    partial class testmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,7 +53,7 @@ namespace PartitioningEfCore.Migrations
 
                     b
                         .HasAnnotation("Partition:FieldName", "Year")
-                        .HasAnnotation("Partition:SchemaName", "TestSchemeA");
+                        .HasAnnotation("Partition:SchemaName", "TestMertSheme");
                 });
 
             modelBuilder.Entity("PartitioningEfCore.database.TestTable", b =>

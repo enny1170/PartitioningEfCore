@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
@@ -180,6 +181,12 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
             builder.Append(")");
 
             // Überprüfen auf Partition-Annotation und generieren Sie zusätzlichen SQL-Code
+            StringBuilder sb= new StringBuilder();
+            foreach(var item in model?.GetEntityTypes())
+            {
+                sb.AppendLine($"Entity: {item.Name}");
+            }
+            _logger.LogInformation(sb.ToString());
             var entityType = model?.GetEntityTypes().FirstOrDefault(x => x.Name.Split('.').Last() == operation.Name);
             if (entityType == null)
             {
@@ -189,6 +196,7 @@ namespace PartitioningEfCore.EfCoreMigrationExtensions
             }
             if (entityType != null)
             {
+                _logger.LogInformation($"Entity for {operation.Name} found");
                 var x = entityType.AnnotationsToDebugString();
                 var partitionSchema = entityType.FindAnnotation("Partition:SchemaName")?.Value?.ToString();
                 var partitionField = entityType.FindAnnotation("Partition:FieldName")?.Value?.ToString();
